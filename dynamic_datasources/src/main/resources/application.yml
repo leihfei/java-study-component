@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    primary:
+      url: jdbc:mysql://localhost:3306/primary_db?characterEncoding=utf8&useSSL=false&serverTimezone=UTC
+      username: root
+      password: root
+    slave:
+      url: jdbc:mysql://localhost:3306/slave_db?characterEncoding=utf8&useSSL=false&serverTimezone=UTC
+      username: root
+      password: root
