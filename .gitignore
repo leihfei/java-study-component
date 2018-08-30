@@ -7,3 +7,8 @@
 *.iml
 .gitignore
 .idea/
+target/
+*.cmd
+mvnw
+logs/
+.mvn/
