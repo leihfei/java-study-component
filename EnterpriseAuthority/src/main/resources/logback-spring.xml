@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration scan="false" scanPeriod="10 seconds">
+<configuration scan="true" scanPeriod="60 seconds">
     <logger name="org.springframework" level="WARN" />
     <logger name="org.apache.activemq" level="INFO" />
     <logger name="org.apache.zookeeper" level="INFO" />
     <logger name="com.alibaba.dubbo" level="WARN" />
-    <logger name="com.lnlr" level="DEBUG" />
-    <logger name="com.lnlr.dynamic.pojo" level="DEBUG" />
+    <logger name="com.lnlr.authority.security" level="DEBUG" />
+
     <!--文件输出的格式设置 -->
     <appender name="FILE"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -44,7 +44,7 @@
         <!-- 控制台输出的日志 的格式 -->
         <encoder>
             <pattern>
-                [ %-5level] [%date{yyyy-MM-dd HH:mm:ss}] %logger{96} [%line] - %msg%n
+                [ %-5level] [%date{yyyy-MM-dd HH:mm:ss}] [%thread] %logger{96} [%line] - %msg%n
             </pattern>
             <charset>UTF-8</charset> <!-- 此处设置字符集 -->
         </encoder>
