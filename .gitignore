@@ -12,9 +12,3 @@ target/
 mvnw
 logs/
 .mvn/
-pom.xml
-src/main/java/com/lnlr/authority/config/redis/
-src/main/java/com/lnlr/authority/security/pojo/slave/
-src/main/resources/static/
-src/main/resources/templates/
-src/test/

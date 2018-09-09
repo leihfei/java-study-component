@@ -1,10 +1,9 @@
 package com.lnlr.authority.security.pojo.master.entity;
 
+import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /**
@@ -16,32 +15,70 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "sys_user")
 @Data
-public class User {
+@Builder
+public class SysUser {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    /**
+     * 系统登录用户名称
+     */
     private String username;
 
+    /**
+     * 系统用户名称
+     */
     private String realName;
 
+    /**
+     * 用户电话号码
+     */
     private String telphone;
 
+    /**
+     * 邮箱
+     */
     private String email;
 
+    /**
+     * 用户密码
+     */
     private String password;
 
+    /**
+     * 密码盐值
+     */
     private String salt;
 
+    /**
+     * 部门id
+     */
     private String deptId;
 
+    /**
+     * 状态
+     */
     private Integer status;
 
+    /**
+     * 备注
+     */
     private String remark;
 
+    /**
+     * 操作人
+     */
     private String operator;
 
+    /**
+     * 操作时间
+     */
     private LocalDateTime operatorTime;
 
+    /**
+     * 操作ip
+     */
     private String operatorIp;
 
 }
