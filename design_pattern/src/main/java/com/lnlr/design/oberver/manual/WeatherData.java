@@ -42,10 +42,10 @@ public class WeatherData implements Subject {
      */
     public void notifyObserver() {
         System.out.println("向订阅者推送数据...");
-        observers.forEach(observer -> {
+        for (Observer observer : observers) {
             System.out.println("发送数据....");
             observer.update(temperature, humidity, pressure);
-        });
+        }
     }
 
     /**

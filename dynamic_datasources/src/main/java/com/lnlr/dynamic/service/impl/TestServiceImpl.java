@@ -1,6 +1,6 @@
 package com.lnlr.dynamic.service.impl;
 
-import com.lnlr.dynamic.pojo.master.dao.UserDao;
+import com.lnlr.dynamic.pojo.master.dao.UserDao1;
 import com.lnlr.dynamic.pojo.slave.dao.TestDao;
 import com.lnlr.dynamic.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class TestServiceImpl implements TestService {
      * 第一个数据源数据
      */
     @Autowired
-    private UserDao userDao;
+    private UserDao1 userDao1;
 
     /**
      * 第二数据源数据
@@ -42,7 +42,7 @@ public class TestServiceImpl implements TestService {
     @Override
     public List<Object> find() {
         List list = new ArrayList();
-        list.add(userDao.findAll());
+        list.add(userDao1.findAll());
         list.add(testDao.findAll());
         return list;
     }

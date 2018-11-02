@@ -1,0 +1,31 @@
+单例模式：  确保对象只有一个，并提供全局访问。
+    构造参数私有
+    对外提供一个对外获取对象的方法
+
+单例模式：
+    1. 懒汉式
+        需要用到才进行new对象
+
+    2. 饿汉式
+        加载类的时候就new对象
+        private static Singeton sington = new Singeton()
+
+单例模式优化：
+    多线程情况下也会出现异常
+    解决方式： 添加synchronized 同步代码块（添加在方法上）
+        存在问题： 当获取单例对象的方法被频繁的调用，又会造成资源的锁定。
+        再次优化： 使用饿汉式方法，加载类对象的时候就进行初始化值
+    双重检查加锁法：
+        在成员变量中添加volatile线程关键字
+        在获取对象方法中判断两次实例对象，在两次中间添加synchorination方法进行锁定
+        public static Singleton getInstance(){
+            if(instance == null){
+                synchorization(Singleton.class){
+                    if(instance == null){
+                        instance = new Singleton();
+                    }
+                }
+            }
+            return instance;
+        }
+

@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    primary:
+      url: jdbc:mysql://119.23.55.112:3306/sys_permission_db?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&autoReconnect=true&failOverReadOnly=false
+      username: lnlr
+      password: lnlr
+    slave:
+      url: jdbc:mysql://119.23.55.112:3306/sys_permission_db?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&autoReconnect=true&failOverReadOnly=false
+      username: lnlr
+      password: lnlr
+server:
+  port: 8089
+  servlet:
+    context-path: /security
+
+project_swagger_url: http://localhost:8089/security/swagger-ui.html
+project_druid_url: http://localhost:8089/security/druid/login.html
+project_fulsh_exculde_url: http://localhost:8089/security/sys/authorizing/flush
