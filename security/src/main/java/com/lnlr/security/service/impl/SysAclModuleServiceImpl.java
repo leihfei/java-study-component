@@ -1,7 +1,9 @@
 package com.lnlr.security.service.impl;
 
 import com.google.common.base.Preconditions;
+import com.lnlr.common.constains.LogConstants;
 import com.lnlr.common.entity.IdEntity;
+import com.lnlr.common.exception.FaileResponseException;
 import com.lnlr.common.jpa.model.NgData;
 import com.lnlr.common.jpa.model.NgPager;
 import com.lnlr.common.jpa.query.DynamicSpecifications;
@@ -12,13 +14,18 @@ import com.lnlr.common.response.Response;
 import com.lnlr.common.response.SuccessResponse;
 import com.lnlr.common.utils.*;
 import com.lnlr.security.pojo.master.dao.SysAclModuleDAO;
+import com.lnlr.security.pojo.master.dao.SysLogDAO;
 import com.lnlr.security.pojo.master.dto.AclModuleParam;
+import com.lnlr.security.pojo.master.entity.SysAcl;
 import com.lnlr.security.pojo.master.entity.SysAclModule;
 import com.lnlr.security.pojo.master.vo.module.AclModuleVO;
 import com.lnlr.security.service.SysAclModuleService;
+import com.lnlr.security.service.SysAclService;
 import com.lnlr.security.service.SysUserService;
+import com.sun.xml.internal.messaging.saaj.util.LogDomainConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,8 +48,10 @@ public class SysAclModuleServiceImpl implements SysAclModuleService {
     private SysAclModuleDAO aclModuleDAO;
 
     @Autowired
-    private SysUserService userService;
+    private SysAclService aclService;
 
+    @Autowired
+    private SysLogDAO logDAO;
 
     @Override
     public Response create(AclModuleParam aclModuleParam) {
@@ -59,6 +68,8 @@ public class SysAclModuleServiceImpl implements SysAclModuleService {
         SysAclModule module = aclModuleDAO.save(sysAclModule);
         Preconditions.checkNotNull(module, "新增权限模块失败!");
         AclModuleVO vo = CopyUtils.beanCopy(module, new AclModuleVO());
+        // 保存日志
+        logDAO.save( LogPropertiesUtils.set(LogConstants.TYPE_ACL_MODULE, null, module, module.getId()));
         return new ObjectResponse<>(vo);
     }
 
@@ -89,6 +100,8 @@ public class SysAclModuleServiceImpl implements SysAclModuleService {
         Preconditions.checkNotNull(save, "更新权限模块失败");
         updateWithChild(befor, save);
         AclModuleVO vo = CopyUtils.beanCopy(save, new AclModuleVO());
+        // 保存日志
+        logDAO.save( LogPropertiesUtils.set(LogConstants.TYPE_DEPT, befor, save, save.getId()));
         return new ObjectResponse<>(vo);
     }
 
@@ -102,8 +115,11 @@ public class SysAclModuleServiceImpl implements SysAclModuleService {
         if (allByParentId != null && !allByParentId.isEmpty()) {
             throw new RuntimeException("当前模块下面有子模块，无法删除!");
         }
-        // 判断用户
-
+        // 判断是否有权限点
+        List<SysAcl> acls = aclService.findAllByModuleId(idEntity.getId());
+        if(CollectionUtils.isNotEmpty(acls)){
+            throw new FaileResponseException("模块存在权限点，无法删除!");
+        }
         aclModuleDAO.deleteById(idEntity.getId());
         return new SuccessResponse("删除成功");
     }

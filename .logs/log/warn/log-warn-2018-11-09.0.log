@@ -1,0 +1,24 @@
+2018-11-09 22:13:14.621 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration$JpaWebMvcConfiguration Line:237 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2018-11-09 22:13:46.067 WARN  com.lnlr.common.filter.JwtVerificationFilter Line:73  - 请求:/security/sys/role/roleTree.json token信息异常
+2018-11-09 22:14:13.622 WARN  com.lnlr.common.filter.JwtVerificationFilter Line:65  - 请求:/security/sys/dept/deptTree.json 无Authorization信息
+2018-11-09 22:15:06.953 WARN  com.lnlr.common.filter.PermissionFilter Line:48  - 无权限访问,用户:黎睿,访问:/security/sys/role/roleTree.json,参数:{}
+2018-11-09 22:15:25.426 WARN  com.lnlr.common.filter.PermissionFilter Line:48  - 无权限访问,用户:黎睿,访问:/security/sys/role/changeAcls.json,参数:{}
+2018-11-09 22:17:22.731 WARN  com.lnlr.common.filter.PermissionFilter Line:48  - 无权限访问,用户:黎睿,访问:/security/sys/role/roleTree.json,参数:{}
+2018-11-09 22:18:23.477 WARN  com.lnlr.common.filter.PermissionFilter Line:48  - 无权限访问,用户:黎睿,访问:/security/sys/role/roleTree.json,参数:{}
+2018-11-09 22:18:35.414 WARN  com.lnlr.common.filter.PermissionFilter Line:48  - 无权限访问,用户:黎睿,访问:/security/sys/role/roleTree.json,参数:{}
+2018-11-09 22:19:44.845 WARN  com.lnlr.common.filter.PermissionFilter Line:48  - 无权限访问,用户:黎睿,访问:/security/sys/role/roleTree.json,参数:{}
+2018-11-09 22:20:22.749 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration$JpaWebMvcConfiguration Line:237 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2018-11-09 22:21:06.128 WARN  com.lnlr.common.filter.PermissionFilter Line:48  - 无权限访问,用户:黎睿,访问:/sys/role/roleTree.json,参数:{}
+2018-11-09 22:22:02.560 WARN  com.lnlr.common.filter.PermissionFilter Line:48  - 无权限访问,用户:黎睿,访问:/sys/role/roleTree.json,参数:{}
+2018-11-09 22:22:49.083 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration$JpaWebMvcConfiguration Line:237 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2018-11-09 22:27:08.561 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration$JpaWebMvcConfiguration Line:237 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2018-11-09 22:28:09.726 WARN  com.lnlr.common.filter.PermissionFilter Line:48  - 无权限访问,用户:黎睿,访问:/sys/role/roleTree.json,参数:{}
+2018-11-09 22:28:48.695 WARN  com.lnlr.common.filter.PermissionFilter Line:48  - 无权限访问,用户:黎睿,访问:/sys/role/roleTree.json,参数:{}
+2018-11-09 22:30:33.287 WARN  com.lnlr.common.filter.PermissionFilter Line:48  - 无权限访问,用户:黎睿,访问:/sys/role/roleTree.json,参数:{}
+2018-11-09 22:31:17.602 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration$JpaWebMvcConfiguration Line:237 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2018-11-09 22:34:18.468 WARN  org.hibernate.engine.jdbc.spi.SqlExceptionHelper Line:129 - SQL Error: 0, SQLState: S1009
+2018-11-09 22:34:18.723 WARN  org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver Line:140 - Resolved [org.springframework.orm.jpa.JpaSystemException: could not execute query; nested exception is org.hibernate.exception.GenericJDBCException: could not execute query]
+2018-11-09 22:34:25.660 WARN  org.hibernate.engine.jdbc.spi.SqlExceptionHelper Line:129 - SQL Error: 0, SQLState: S1009
+2018-11-09 22:35:01.501 WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration$JpaWebMvcConfiguration Line:237 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2018-11-09 22:35:12.783 WARN  org.hibernate.engine.jdbc.spi.SqlExceptionHelper Line:129 - SQL Error: 0, SQLState: S1009
+2018-11-09 22:35:56.955 WARN  com.lnlr.common.filter.PermissionFilter Line:48  - 无权限访问,用户:黎睿,访问:/sys/acl/page.json,参数:{}

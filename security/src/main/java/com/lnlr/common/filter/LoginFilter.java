@@ -53,7 +53,7 @@ public class LoginFilter implements Filter {
         log.info("进入LoginFilter");
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        String path = request.getRequestURI();
+        String path = request.getServletPath();
         if (!ExcludePathUtils.checkExcludeUrl(servletRequest, servletResponse, path)) {
             // 需要认证，由于在jwt处认证过，这里就不需要再次认证，只需要做出当前登录用户保存即可
             String header = request.getHeader(SystemConstants.AUTHORIZATION);

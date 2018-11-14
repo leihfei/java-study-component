@@ -1,6 +1,7 @@
 package com.lnlr.security.service.impl;
 
 import com.google.common.base.Preconditions;
+import com.lnlr.common.constains.LogConstants;
 import com.lnlr.common.constains.SystemConstants;
 import com.lnlr.common.entity.HashPassword;
 import com.lnlr.common.exception.FaileResponseException;
@@ -14,6 +15,7 @@ import com.lnlr.common.response.ObjectResponse;
 import com.lnlr.common.response.Response;
 import com.lnlr.common.utils.*;
 import com.lnlr.security.pojo.master.dao.SysDeptDAO;
+import com.lnlr.security.pojo.master.dao.SysLogDAO;
 import com.lnlr.security.pojo.master.dao.SysUserDAO;
 import com.lnlr.security.pojo.master.dto.CheckPassParam;
 import com.lnlr.security.pojo.master.dto.UserParam;
@@ -48,6 +50,9 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Autowired
     private SysDeptDAO deptDAO;
+
+    @Autowired
+    private SysLogDAO logDAO;
 
 
     @Override
@@ -85,6 +90,8 @@ public class SysUserServiceImpl implements SysUserService {
         SysUser save = userDAO.save(sysUser);
         Preconditions.checkNotNull(save, "新增用户失败");
         UserVO vo = CopyUtils.beanCopy(save, new UserVO());
+        // 保存日志
+        logDAO.save( LogPropertiesUtils.set(LogConstants.TYPE_USER, null, save, save.getId()));
         return new ObjectResponse<>(vo);
     }
 
@@ -137,6 +144,8 @@ public class SysUserServiceImpl implements SysUserService {
         SysUser save = userDAO.save(befor);
         Preconditions.checkNotNull(save, "更新用户失败");
         UserVO vo = CopyUtils.beanCopy(save, new UserVO());
+        // 保存日志
+        logDAO.save( LogPropertiesUtils.set(LogConstants.TYPE_DEPT, befor, save, save.getId()));
         return new ObjectResponse<>(vo);
     }
 
@@ -291,5 +300,10 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public SysUser findById(Integer id) {
         return userDAO.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<SysUser> findAllByDeptId(Integer id) {
+        return userDAO.findAllByDeptId(id);
     }
 }

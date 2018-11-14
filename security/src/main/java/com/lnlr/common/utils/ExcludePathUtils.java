@@ -80,9 +80,11 @@ public class ExcludePathUtils {
         String path = request.getRequestURI();
         if (expiration.getTime() - currentDate.getTime() <= expireTime) {
             //跳转到特定接口进行token再次生成
-            request.setAttribute(SystemConstants.JWT_LOGIN_USER, claims.get(SystemConstants.JWT_LOGIN_USER));
-            request.setAttribute(SystemConstants.JWT_LOGIN_USERNAME, claims.get(SystemConstants.JWT_LOGIN_USERNAME));
-            log.info("请求: {} 以过期，需要重新生成token信息", path);
+            String userId = (String) claims.get(SystemConstants.JWT_LOGIN_USER);
+            String userName = (String) claims.get(SystemConstants.JWT_LOGIN_USERNAME);
+            request.setAttribute(SystemConstants.JWT_LOGIN_USER, userId);
+            request.setAttribute(SystemConstants.JWT_LOGIN_USERNAME, userName);
+            log.info("请求: {} 以过期，需要重新生成token信息,信息数据:userId={},userName={}", path,userId,userName);
             response.sendRedirect(SystemConstants.CREATE_TOKEN);
             return true;
         }

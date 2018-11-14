@@ -1,6 +1,7 @@
 package com.lnlr.security.service.impl;
 
 import com.google.common.base.Preconditions;
+import com.lnlr.common.constains.LogConstants;
 import com.lnlr.common.entity.IdEntity;
 import com.lnlr.common.jpa.model.NgData;
 import com.lnlr.common.jpa.model.NgPager;
@@ -12,6 +13,7 @@ import com.lnlr.common.utils.BeanValidator;
 import com.lnlr.common.utils.CopyUtils;
 import com.lnlr.common.utils.IpUtils;
 import com.lnlr.common.utils.RequestHolder;
+import com.lnlr.security.pojo.master.dao.SysLogDAO;
 import com.lnlr.security.pojo.master.dao.SysRoleDAO;
 import com.lnlr.security.pojo.master.dto.RoleParam;
 import com.lnlr.security.pojo.master.entity.SysRole;
@@ -37,6 +39,9 @@ public class SysRoleServiceImpl implements SysRoleService {
     @Autowired
     private SysRoleDAO roleDAO;
 
+    @Autowired
+    private SysLogDAO logDAO;
+
     @Override
     public Response create(RoleParam roleParam) {
         BeanValidator.check(roleParam);
@@ -51,6 +56,8 @@ public class SysRoleServiceImpl implements SysRoleService {
         Preconditions.checkNotNull(save, "新增角色失败!");
         // 封装返回数据
         RoleVO vo = CopyUtils.beanCopy(save, new RoleVO());
+        // 保存日志
+        logDAO.save( LogPropertiesUtils.set(LogConstants.TYPE_ROLE, null, save, save.getId()));
         return new ObjectResponse<>(vo);
     }
 
@@ -78,6 +85,8 @@ public class SysRoleServiceImpl implements SysRoleService {
         SysRole save = roleDAO.save(after);
         Preconditions.checkNotNull(save, "角色数据更新失败！");
         RoleVO vo = CopyUtils.beanCopy(save, new RoleVO());
+        // 保存日志
+        logDAO.save( LogPropertiesUtils.set(LogConstants.TYPE_DEPT, befor, save, save.getId()));
         return new ObjectResponse<>(vo);
     }
 

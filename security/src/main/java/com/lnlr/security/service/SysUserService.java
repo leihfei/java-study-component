@@ -6,7 +6,10 @@ import com.lnlr.common.response.Response;
 import com.lnlr.security.pojo.master.dto.CheckPassParam;
 import com.lnlr.security.pojo.master.dto.UserParam;
 import com.lnlr.security.pojo.master.entity.SysUser;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -86,4 +89,8 @@ public interface SysUserService {
      * @return
      */
     SysUser findById(Integer id);
+
+
+
+    List<SysUser> findAllByDeptId(Integer id);
 }

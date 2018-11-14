@@ -5,9 +5,10 @@ import com.lnlr.common.jpa.model.NgPager;
 import com.lnlr.common.response.ObjectResponse;
 import com.lnlr.common.response.Response;
 import com.lnlr.common.response.SuccessResponse;
-import com.lnlr.security.pojo.master.dto.AclModuleParam;
 import com.lnlr.security.pojo.master.dto.AclParam;
+import com.lnlr.security.pojo.master.dto.RoleAclOperatorDTO;
 import com.lnlr.security.pojo.master.dto.RoleParam;
+import com.lnlr.security.service.SysRoleAclService;
 import com.lnlr.security.service.SysRoleService;
 import com.lnlr.security.service.impl.SysTreeService;
 import io.swagger.annotations.Api;
@@ -15,7 +16,10 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author:leihfei
@@ -34,6 +38,9 @@ public class SysRoleController {
 
     @Autowired
     private SysTreeService treeService;
+
+    @Autowired
+    private SysRoleAclService roleAclService;
 
 
     @PostMapping(value = "/create.json")
@@ -80,5 +87,20 @@ public class SysRoleController {
     @ApiImplicitParam(dataTypeClass = IdEntity.class, paramType = "query")
     public Response roleTree(@RequestBody IdEntity idEntity) {
         return new ObjectResponse<>(treeService.roleTree(idEntity));
+    }
+
+    @PostMapping(value = "/changeAcls.json")
+    @ApiOperation(value = "更改角色权限点")
+    @ApiImplicitParam(dataTypeClass = RoleAclOperatorDTO.class, paramType = "query")
+    public Response changeAcls(@RequestBody RoleAclOperatorDTO roleAclDto) {
+        return roleAclService.changeRoleAcls(roleAclDto.getId(), roleAclDto.getAclIds());
+    }
+
+    @PostMapping(value = "/users.json")
+    @ApiOperation(value = "获取用户权限")
+    @ApiImplicitParam(dataTypeClass = RoleAclOperatorDTO.class, paramType = "query")
+    public Response users(@RequestBody IdEntity idEntity) {
+
+        return new SuccessResponse();
     }
 }

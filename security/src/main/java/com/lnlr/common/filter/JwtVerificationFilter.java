@@ -56,7 +56,7 @@ public class JwtVerificationFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         Preconditions.checkNotNull(ExcludePathUtils.paths, "拦截器过滤地址异常!");
-        String path = request.getRequestURI();
+        String path = request.getServletPath();
         // 检查是否存在放过拦截,返回false说明需要认证
         if (!ExcludePathUtils.checkExcludeUrl(servletRequest, servletResponse, path)) {
             // 表示需要验证jat,验证通过就放过，否则需要登录

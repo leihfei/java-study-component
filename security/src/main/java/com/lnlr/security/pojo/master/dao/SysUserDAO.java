@@ -4,6 +4,8 @@ import com.lnlr.security.pojo.master.entity.SysUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+import java.util.List;
+
 /**
  * @author:leihfei
  * @description 部门管理持久层
@@ -47,4 +49,12 @@ public interface SysUserDAO extends JpaRepository<SysUser, Integer>, JpaSpecific
      * @return
      */
     SysUser findAllByUsernameOrTelphoneOrEmail(String username, String telphone, String email);
+
+    /**
+     * 通过部门查询用户
+     * @param deptId
+     * @return
+     */
+    List<SysUser> findAllByDeptId(Integer deptId);
+
 }

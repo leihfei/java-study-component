@@ -1,6 +1,7 @@
 package com.lnlr.security.service.impl;
 
 import com.google.common.base.Preconditions;
+import com.lnlr.common.constains.LogConstants;
 import com.lnlr.common.entity.IdEntity;
 import com.lnlr.common.jpa.model.NgData;
 import com.lnlr.common.jpa.model.NgPager;
@@ -13,6 +14,7 @@ import com.lnlr.common.utils.CopyUtils;
 import com.lnlr.common.utils.IpUtils;
 import com.lnlr.common.utils.RequestHolder;
 import com.lnlr.security.pojo.master.dao.SysAclDAO;
+import com.lnlr.security.pojo.master.dao.SysLogDAO;
 import com.lnlr.security.pojo.master.dto.AclParam;
 import com.lnlr.security.pojo.master.entity.SysAcl;
 import com.lnlr.security.pojo.master.vo.acl.AclVO;
@@ -39,6 +41,8 @@ public class SysAclServiceImpl implements SysAclService {
     @Autowired
     private SysAclDAO aclDAO;
 
+    @Autowired
+    private SysLogDAO logDAO;
 
     /**
      * @param aclParam 权限点
@@ -69,6 +73,8 @@ public class SysAclServiceImpl implements SysAclService {
         Preconditions.checkNotNull(save, "新增权限点失败!");
         // 封装返回数据
         AclVO vo = CopyUtils.beanCopy(save, new AclVO());
+        // 保存日志
+        logDAO.save( LogPropertiesUtils.set(LogConstants.TYPE_ACL, null, save, save.getId()));
         return new ObjectResponse<>(vo);
     }
 
@@ -103,6 +109,8 @@ public class SysAclServiceImpl implements SysAclService {
         Preconditions.checkNotNull(save, "更新权限点失败!");
         // 封装返回数据
         AclVO vo = CopyUtils.beanCopy(save, new AclVO());
+        // 保存日志
+        logDAO.save( LogPropertiesUtils.set(LogConstants.TYPE_ACL, befor, save, after.getId()));
         return new ObjectResponse<>(vo);
     }
 
@@ -134,6 +142,22 @@ public class SysAclServiceImpl implements SysAclService {
     @Override
     public List<SysAcl> findAllByIds(List<Integer> ids) {
         return aclDAO.findAllById(ids);
+    }
+
+    @Override
+    public List<SysAcl> findAllByModuleId(Integer id) {
+        return aclDAO.findAllByAclModuleId(id);
+    }
+
+    /**
+     * 通过url查询权限点
+     *
+     * @param url
+     * @return
+     */
+    @Override
+    public List<SysAcl> findAllByUrl(String url) {
+        return aclDAO.findAllByUrl(url);
     }
 
     /**

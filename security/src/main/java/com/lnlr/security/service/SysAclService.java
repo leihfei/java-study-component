@@ -29,4 +29,8 @@ public interface SysAclService {
     List<SysAcl> findAll();
 
     List<SysAcl> findAllByIds(List<Integer> ids);
+
+    List<SysAcl> findAllByModuleId(Integer id);
+
+    List<SysAcl> findAllByUrl(String url);
 }

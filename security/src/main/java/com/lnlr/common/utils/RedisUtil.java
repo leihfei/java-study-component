@@ -1,5 +1,7 @@
 package com.lnlr.common.utils;
 
+import com.google.common.base.Joiner;
+import com.lnlr.common.constains.CacheConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
@@ -24,16 +26,50 @@ public class RedisUtil {
         return jedisPool.getResource();
     }
 
+    /**
+     * @param key,
+     * @param value
+     * @return java.lang.String
+     * @author: leihfei
+     * @description 缓存数据
+     * @date: 21:53 2018/11/9
+     * @email: leihfein@gmail.com
+     */
     public String set(String key, String value) {
+        Jedis jedis = getResource();
+        return set(key, value, null);
+    }
+
+    /**
+     * @param key,
+     * @param value
+     * @return java.lang.String
+     * @author: leihfei
+     * @description 缓存数据
+     * @date: 21:53 2018/11/9
+     * @email: leihfein@gmail.com
+     */
+    public String set(String key, String value, Integer timeout) {
         Jedis jedis = getResource();
         try {
             jedis.set(key, value);
+            if (timeout != null) {
+                jedis.expire(key, timeout);
+            }
             return value;
         } finally {
             jedis.close();
         }
     }
 
+    /**
+     * @param key
+     * @return java.lang.String
+     * @author: leihfei
+     * @description 通过key取数据
+     * @date: 21:54 2018/11/9
+     * @email: leihfein@gmail.com
+     */
     public String get(String key) {
         Jedis jedis = getResource();
         try {
@@ -108,5 +144,22 @@ public class RedisUtil {
         } finally {
             jedis.close();
         }
+    }
+
+    /**
+     * @param prefix 前缀
+     * @param keys key值
+     * @author: leihfei
+     * @description 通过key，自动生成缓存前缀
+     * @return java.lang.String
+     * @date: 22:00 2018/11/9
+     * @email: leihfein@gmail.com
+     */
+    public String generateCacheKey(CacheConstants prefix, String... keys) {
+        String key = prefix.name();
+        if (keys != null && keys.length > 0) {
+            key += "_" + Joiner.on("_").join(keys);
+        }
+        return key;
     }
 }

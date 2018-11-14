@@ -2,10 +2,12 @@ package com.lnlr.config.filter;
 
 import com.lnlr.common.filter.JwtVerificationFilter;
 import com.lnlr.common.filter.LoginFilter;
-import io.jsonwebtoken.Jwt;
+import com.lnlr.common.filter.PermissionFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.servlet.Filter;
 
 /**
  * @author:leihfei
@@ -17,26 +19,35 @@ import org.springframework.context.annotation.Configuration;
 public class FilterConfig {
     @Bean
     public FilterRegistrationBean registrationJwtVerificationFilterBean() {
+        return registrationBean(getJwtVerificationFilter(), "/*", 1);
+    }
+
+    private FilterRegistrationBean registrationBean(Filter filter, String pattern, int order) {
         FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(getJwtVerificationFilter());
-        registration.addUrlPatterns("/*");
-        registration.setOrder(1);
+        registration.setFilter(filter);
+        registration.addUrlPatterns(pattern);
+        registration.setOrder(order);
         return registration;
     }
 
-
     @Bean
     public FilterRegistrationBean registrationLoginFilterBean() {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(getLoginFilter());
-        registration.addUrlPatterns("/*");
-        registration.setOrder(2);
-        return registration;
+        return registrationBean(getLoginFilter(), "/*", 2);
+    }
+
+    @Bean
+    public FilterRegistrationBean registrationPermissionFilterBean() {
+        return registrationBean(getPermissionFilter(), "/*", 3);
     }
 
     @Bean
     public LoginFilter getLoginFilter() {
         return new LoginFilter();
+    }
+
+    @Bean
+    public PermissionFilter getPermissionFilter() {
+        return new PermissionFilter();
     }
 
     @Bean

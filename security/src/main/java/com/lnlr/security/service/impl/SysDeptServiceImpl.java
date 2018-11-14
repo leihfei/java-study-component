@@ -1,6 +1,7 @@
 package com.lnlr.security.service.impl;
 
 import com.google.common.base.Preconditions;
+import com.lnlr.common.constains.LogConstants;
 import com.lnlr.common.entity.IdEntity;
 import com.lnlr.common.exception.FaileResponseException;
 import com.lnlr.common.exception.ParamException;
@@ -13,10 +14,13 @@ import com.lnlr.common.response.Response;
 import com.lnlr.common.response.SuccessResponse;
 import com.lnlr.common.utils.*;
 import com.lnlr.security.pojo.master.dao.SysDeptDAO;
+import com.lnlr.security.pojo.master.dao.SysLogDAO;
 import com.lnlr.security.pojo.master.dto.DeptParam;
 import com.lnlr.security.pojo.master.entity.SysDept;
+import com.lnlr.security.pojo.master.entity.SysUser;
 import com.lnlr.security.pojo.master.vo.dept.DeptVO;
 import com.lnlr.security.service.SysDeptService;
+import com.lnlr.security.service.SysUserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +40,13 @@ public class SysDeptServiceImpl implements SysDeptService {
 
     @Autowired
     private SysDeptDAO deptDAO;
+
+
+    @Autowired
+    private SysUserService userService;
+
+    @Autowired
+    private SysLogDAO logDAO;
 
     @Override
     public NgData page(NgPager ngPager) {
@@ -66,6 +77,8 @@ public class SysDeptServiceImpl implements SysDeptService {
         dept.setOperatorTime(LocalDateTime.now());
         SysDept save = deptDAO.save(dept);
         DeptVO vo = CopyUtils.beanCopy(save, new DeptVO());
+        // 保存日志
+        logDAO.save( LogPropertiesUtils.set(LogConstants.TYPE_DEPT, null, save, save.getId()));
         return new ObjectResponse<>(vo);
     }
 
@@ -95,6 +108,8 @@ public class SysDeptServiceImpl implements SysDeptService {
         updateWithChild(sysDept, after);
         // 组装vo返回
         DeptVO vo = CopyUtils.beanCopy(after, new DeptVO());
+        // 保存日志
+        logDAO.save( LogPropertiesUtils.set(LogConstants.TYPE_ACL, sysDept, after, after.getId()));
         return new ObjectResponse<>(vo);
     }
 
@@ -160,7 +175,11 @@ public class SysDeptServiceImpl implements SysDeptService {
             throw new FaileResponseException("该部门存在子部门");
         }
         // 检查用户数据
-        //TODO
+        List<SysUser> users = userService.findAllByDeptId(id.getId());
+        if (CollectionUtils.isNotEmpty(users)) {
+            throw new FaileResponseException("部门存在用户，无法删除");
+        }
+        deptDAO.deleteById(id.getId());
         return new SuccessResponse("删除成功");
     }
 }

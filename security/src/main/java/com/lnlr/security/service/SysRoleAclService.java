@@ -1,5 +1,6 @@
 package com.lnlr.security.service;
 
+import com.lnlr.common.response.Response;
 import com.lnlr.security.pojo.master.entity.SysRoleAcl;
 
 import java.util.List;
@@ -20,4 +21,12 @@ public interface SysRoleAclService {
      */
     List<SysRoleAcl> findAllByRoleIdList(List<Integer> ids);
 
+
+    /**
+     *  更改角色权限
+     * @param roleId
+     * @param ids
+     * @return
+     */
+    Response changeRoleAcls(Integer roleId, List<Integer> ids);
 }

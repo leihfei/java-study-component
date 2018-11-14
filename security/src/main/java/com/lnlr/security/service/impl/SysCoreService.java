@@ -1,5 +1,8 @@
 package com.lnlr.security.service.impl;
 
+import com.lnlr.common.constains.CacheConstants;
+import com.lnlr.common.utils.JsonUtils;
+import com.lnlr.common.utils.RedisUtil;
 import com.lnlr.common.utils.RequestHolder;
 import com.lnlr.security.pojo.master.entity.SysAcl;
 import com.lnlr.security.pojo.master.entity.SysRoleAcl;
@@ -8,11 +11,13 @@ import com.lnlr.security.pojo.master.entity.SysUserRole;
 import com.lnlr.security.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -29,17 +34,15 @@ public class SysCoreService {
     private SysAclService aclService;
 
     @Autowired
-    private SysUserService userService;
-
-    @Autowired
-    private SysRoleService roleService;
-
-    @Autowired
     private SysUserRoleService userRoleService;
 
     @Autowired
     private SysRoleAclService roleAclService;
 
+    @Autowired
+    private RedisUtil redisUtil;
+
+    private Integer expire = 600;
 
     /**
      * @param
@@ -52,6 +55,28 @@ public class SysCoreService {
     public List<SysAcl> getCurrentUserAclList() {
         Integer id = RequestHolder.currentUser().getId();
         return getUserAclList(id);
+    }
+
+    /**
+     * @param
+     * @return java.util.List<com.lnlr.security.pojo.master.entity.SysAcl>
+     * @author: leihfei
+     * @description 获取登录用户权限列表, 通过缓存
+     * @date: 1:08 2018/11/1
+     * @email: leihfein@gmail.com
+     */
+    public List<SysAcl> getCurrentUserAclCacheList() {
+        Integer id = RequestHolder.currentUser().getId();
+        String cacheValue = redisUtil.get(redisUtil.generateCacheKey(CacheConstants.USER_ALCE, String.valueOf(id)));
+        if (StringUtils.isBlank(cacheValue)) {
+            // 没有缓存数据
+            List<SysAcl> currentUserAclList = getCurrentUserAclList();
+            if (CollectionUtils.isNotEmpty(currentUserAclList)) {
+                redisUtil.set(redisUtil.generateCacheKey(CacheConstants.USER_ALCE, String.valueOf(id)), JsonUtils.object2Json(currentUserAclList), expire);
+            }
+            return currentUserAclList;
+        }
+        return JsonUtils.json2List(cacheValue,SysAcl.class);
     }
 
     /**
@@ -85,12 +110,12 @@ public class SysCoreService {
         }
         // 查询单独的权限
         List<SysUserRole> roleList = userRoleService.findAllRoleListByUserId(id);
-        if (CollectionUtils.isNotEmpty(roleList)) {
+        if (CollectionUtils.isEmpty(roleList)) {
             return Lists.newArrayList();
         }
         List<Integer> userRoleIdList = roleList.stream().map(e -> e.getRoleId()).collect(Collectors.toList());
         List<SysRoleAcl> roleAcls = roleAclService.findAllByRoleIdList(userRoleIdList);
-        if (CollectionUtils.isNotEmpty(roleAcls)) {
+        if (CollectionUtils.isEmpty(roleAcls)) {
             return Lists.newArrayList();
         }
         List<Integer> aclIds = roleAcls.stream().map(e -> e.getAclId()).collect(Collectors.toList());
@@ -115,6 +140,47 @@ public class SysCoreService {
         // 可以是配置文件获取，可以指定某个用户，也可以指定某个角色
         SysUser sysUser = RequestHolder.currentUser();
         if (sysUser.getEmail().contains("admin")) {
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * @param path 接口地址
+     * @return boolean
+     * @author: leihfei
+     * @description 校验是否拥有权限
+     * @date: 0:01 2018/11/8
+     * @email: leihfein@gmail.com
+     */
+    public boolean hasPermission(String path) {
+        if (isSuperAdmin()) {
+            return true;
+        }
+        // 在权限表中查询接口
+        List<SysAcl> aclList = aclService.findAllByUrl(path);
+        if (CollectionUtils.isEmpty(aclList)) {
+            // 没找到直接没权限
+            return false;
+        }
+        // 获得当前用户权限列表
+        List<SysAcl> userAclList = getCurrentUserAclCacheList();
+        Set<Integer> userAclIdSet = userAclList.stream().map(acl -> acl.getId()).collect(Collectors.toSet());
+        boolean hasValidAcl = false;
+        // 规则：只要有一个权限点有权限，那么我们就认为有访问权限
+        for (SysAcl acl : aclList) {
+            // 判断一个用户是否具有某个权限点的访问权限
+            if (acl == null || acl.getStatus() != 1) {
+                // 权限点无效
+                continue;
+            }
+            hasValidAcl = true;
+            if (userAclIdSet.contains(acl.getId())) {
+                return true;
+            }
+        }
+        if (!hasValidAcl) {
             return true;
         }
         return false;

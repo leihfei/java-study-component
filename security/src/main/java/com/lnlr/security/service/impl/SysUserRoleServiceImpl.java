@@ -1,5 +1,6 @@
 package com.lnlr.security.service.impl;
 
+import com.lnlr.security.pojo.master.dao.SysLogDAO;
 import com.lnlr.security.pojo.master.dao.SysUserRoleDAO;
 import com.lnlr.security.pojo.master.entity.SysUserRole;
 import com.lnlr.security.service.SysUserRoleService;
@@ -21,8 +22,17 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
     @Autowired
     private SysUserRoleDAO userRoleDAO;
 
+    @Autowired
+    private SysLogDAO logDAO;
+
     @Override
     public List<SysUserRole> findAllRoleListByUserId(Integer userId) {
         return userRoleDAO.findAllByUserId(userId);
+    }
+
+    private void log() {
+        // 保存日志
+        // 旧的角色，新角色
+//        logDAO.save( LogPropertiesUtils.set(LogConstants.TYPE_DEPT, befor, save, save.getId()));
     }
 }
