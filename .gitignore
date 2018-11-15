@@ -10,7 +10,7 @@
 target/
 *.cmd
 mvnw
-logs/
+.logs/
 .mvn/
 .editorconfig
 README.md

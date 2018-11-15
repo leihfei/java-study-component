@@ -1,7 +1,7 @@
 import {NgModule, Optional, SkipSelf} from '@angular/core';
-import {HeaderComponent} from './header/header.component';
-import {FooterComponent} from './footer/footer.component';
-import {SidenavComponent} from './sidenav/sidenav.component';
+import {HeaderComponent} from '../common/header/header.component';
+import {FooterComponent} from '../common/footer/footer.component';
+import {SidenavComponent} from '../common/sidenav/sidenav.component';
 import {HttpClientModule} from '@angular/common/http';
 import {DomSanitizer} from '@angular/platform-browser';
 import {SharedModule} from '../shared/shared.module';

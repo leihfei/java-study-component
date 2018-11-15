@@ -1,5 +1,6 @@
 package com.lnlr.common.filter;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.lnlr.common.constains.SystemConstants;
@@ -16,6 +17,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * @author:leihfei
@@ -64,6 +66,7 @@ public class JwtVerificationFilter implements Filter {
             if (StringUtils.isEmpty(header)) {
                 log.warn("请求:{} 无Authorization信息", path);
                 response.sendRedirect(SystemConstants.UNAUTH);
+//                res(response);
                 return;
             }
             // 存在继续校验是否过期
@@ -72,6 +75,7 @@ public class JwtVerificationFilter implements Filter {
             if (claims == null) {
                 log.warn("请求:{} token信息异常", path);
                 response.sendRedirect(SystemConstants.UNAUTH);
+//                res(response);
                 return;
             }
             // 有token,并且是有效的token，检查时间是否过期，如果过期，那么就从新生成token
@@ -85,6 +89,24 @@ public class JwtVerificationFilter implements Filter {
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
+    private boolean res(HttpServletResponse response) {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json; charset=utf-8");
+        PrintWriter out = null;
+        try {
+            JSONObject res = new JSONObject();
+            res.put("message", "您没有权限");
+            res.put("status", "401");
+            res.put("datas", "");
+            out = response.getWriter();
+            out.append(res.toString());
+            out.flush();
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     @Override
     public void destroy() {

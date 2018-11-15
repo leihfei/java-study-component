@@ -2,7 +2,6 @@
   <nz-card style="width:25%;" nzTitle="登录">
     <form nz-form formGroup="validateForm"
           class="login-form"
-          (ngSubmit)="submitForm()"
     >
       <nz-form-item>
         <nz-form-control>
@@ -24,21 +23,22 @@
           </nz-form-explain>
         </nz-form-control>
       </nz-form-item>
-      <nz-form-item>
-        <nz-form-control>
-          <label nz-checkbox formControlName="remember">
-            <span>Remember me</span>
-          </label>
-          <a class="login-form-forgot" class="login-form-forgot">Forgot password</a>
-          <button nz-button class="login-form-button" [nzType]="'primary'">Log in</button>
-          Or
-          <a href="">register now!</a>
-        </nz-form-control>
-      </nz-form-item>
     </form>
-    <ng-template #prefixUser><i nz-icon type="user" theme="outline"></i></ng-template>
-    <ng-template #prefixLock><i nz-icon type="lock" theme="outline"></i></ng-template>
+    <nz-form-item>
+      <nz-form-control>
+        <label nz-checkbox formControlName="remember">
+          <span>Remember me</span>
+        </label>
+        <a class="login-form-forgot" class="login-form-forgot">Forgot password</a>
+        <button nz-button class="login-form-button" nzType="primary" (click)="submitForm()">Log in</button>
+        Or
+        <a href="">register now!</a>
+      </nz-form-control>
+    </nz-form-item>
   </nz-card>
+  <ng-template #prefixUser><i nz-icon type="user" theme="outline"></i></ng-template>
+  <ng-template #prefixLock><i nz-icon type="lock" theme="outline"></i></ng-template>
+  <button nz-button class="login-form-button" nzType="primary" (click)="testInterface()">测试未登录接口</button>
 </div>
 
 

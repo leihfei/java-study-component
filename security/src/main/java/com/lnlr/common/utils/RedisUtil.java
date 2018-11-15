@@ -36,7 +36,6 @@ public class RedisUtil {
      * @email: leihfein@gmail.com
      */
     public String set(String key, String value) {
-        Jedis jedis = getResource();
         return set(key, value, null);
     }
 

@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import static com.lnlr.common.response.Response.NO_LOGIN;
+import static com.lnlr.common.response.Response.NO_PRESSION;
+
 /**
  * @author:leihfei
  * @description 全局异常捕获
@@ -85,4 +88,5 @@ public class ExceptionAdvice {
         log.error("全局异常处理：请求参数异常", ex);
         return new FailedResponse<>(ex.getMessage());
     }
+
 }

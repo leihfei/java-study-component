@@ -57,7 +57,6 @@ public class SystemConstants {
      */
     public static final String CREATE_TOKEN = contextPath + "/sys/authorizing/create_tokem";
 
-
     /**
      * 默认密码
      */
