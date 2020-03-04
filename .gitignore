@@ -40,3 +40,4 @@ src/tslint.json
 tsconfig.json
 tslint.json
 src/main/java/com/lnlr/security/pojo/slave/
+/securityWeb/
