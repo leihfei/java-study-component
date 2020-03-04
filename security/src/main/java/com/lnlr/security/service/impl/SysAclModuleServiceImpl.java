@@ -21,11 +21,8 @@ import com.lnlr.security.pojo.master.entity.SysAclModule;
 import com.lnlr.security.pojo.master.vo.module.AclModuleVO;
 import com.lnlr.security.service.SysAclModuleService;
 import com.lnlr.security.service.SysAclService;
-import com.lnlr.security.service.SysUserService;
-import com.sun.xml.internal.messaging.saaj.util.LogDomainConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
-import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,7 +66,7 @@ public class SysAclModuleServiceImpl implements SysAclModuleService {
         Preconditions.checkNotNull(module, "新增权限模块失败!");
         AclModuleVO vo = CopyUtils.beanCopy(module, new AclModuleVO());
         // 保存日志
-        logDAO.save( LogPropertiesUtils.set(LogConstants.TYPE_ACL_MODULE, null, module, module.getId()));
+        logDAO.save(LogPropertiesUtils.set(LogConstants.TYPE_ACL_MODULE, null, module, module.getId()));
         return new ObjectResponse<>(vo);
     }
 
@@ -101,7 +98,7 @@ public class SysAclModuleServiceImpl implements SysAclModuleService {
         updateWithChild(befor, save);
         AclModuleVO vo = CopyUtils.beanCopy(save, new AclModuleVO());
         // 保存日志
-        logDAO.save( LogPropertiesUtils.set(LogConstants.TYPE_DEPT, befor, save, save.getId()));
+        logDAO.save(LogPropertiesUtils.set(LogConstants.TYPE_DEPT, befor, save, save.getId()));
         return new ObjectResponse<>(vo);
     }
 
@@ -117,7 +114,7 @@ public class SysAclModuleServiceImpl implements SysAclModuleService {
         }
         // 判断是否有权限点
         List<SysAcl> acls = aclService.findAllByModuleId(idEntity.getId());
-        if(CollectionUtils.isNotEmpty(acls)){
+        if (CollectionUtils.isNotEmpty(acls)) {
             throw new FaileResponseException("模块存在权限点，无法删除!");
         }
         aclModuleDAO.deleteById(idEntity.getId());
